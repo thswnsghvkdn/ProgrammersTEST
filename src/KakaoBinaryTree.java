@@ -20,7 +20,7 @@ public class KakaoBinaryTree {
         }
         return binary;
     }
-    // 부모가 0 일때 자식이 1이면 false
+    // 왼쪽 서브트리와 오른쪽 서브트리를 분리해가며 tree 구조 검사
     private boolean isTree(String tree) {
         if(tree.length() <= 3) {
             return compareRootElement(tree);
@@ -29,7 +29,7 @@ public class KakaoBinaryTree {
         String rightChild = tree.substring(tree.length() / 2 + 1);
         return compareRootElement(tree) && isTree(leftChild) && isTree(rightChild);
     }
-    // 인수로 받은 이진수 포화 이진 트리 string 에서 루트 원소 반환
+    // 부모가 0 일때 자식이 1이면 false
     private boolean compareRootElement(String tree) {
         String leftChild = tree.substring(0 , tree.length() / 2);
         String rightChild = tree.substring(tree.length() / 2 + 1);
@@ -40,6 +40,7 @@ public class KakaoBinaryTree {
         }
         return true;
     }
+    // 인수로 받은 이진수 포화 이진 트리 string 에서 루트 원소 반환
     private char getRootElement(String tree) {
         return tree.charAt(tree.length() / 2);
     }
