@@ -46,12 +46,12 @@ public class KakaoTableMerge {
         }
     }
     private void updateTable(String row, String col, String value) {
-        int r = Integer.parseInt(row);
-        int c = Integer.parseInt(col);
+        int r = tables[Integer.parseInt(row)][Integer.parseInt(col)].rootRow;
+        int c = tables[Integer.parseInt(row)][Integer.parseInt(col)].rootCol;
         for(int i = 0 ; i < TABLESIZE; i++) {
             for(int j = 0 ; j < TABLESIZE; j++){
                 if(tables[i][j].rootRow == r && tables[i][j].rootCol == c) {
-                    tables[r][c].value = value;
+                    tables[i][j].value = value;
                 }
             }
         }
@@ -76,7 +76,7 @@ public class KakaoTableMerge {
         }
         tables[r2][c2].rootRow = tables[r1][c1].rootRow;
         tables[r2][c2].rootCol = tables[r1][c1].rootCol;
-        updateTable(Integer.toString(tables[r2][c2].rootRow),Integer.toString(tables[r2][c2].rootCol), tables[r1][c1].value);
+        updateTable(row2,col2, tables[r1][c1].value);
 
     }
     private void unmergeTables(String row, String col) {
