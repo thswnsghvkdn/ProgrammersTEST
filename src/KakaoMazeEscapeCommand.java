@@ -16,11 +16,10 @@ public class KakaoMazeEscapeCommand {
         commands.add(new CommandAndLocation(x,y, ""));
         return bfs();
     }
+
     private String bfs() {
         while(!commands.isEmpty()) {
-
             CommandAndLocation currentLocation = commands.poll();
-
             if(currentLocation.command.length() == answerSize && currentLocation.row == endRow && currentLocation.col == endCol) {
                 return currentLocation.command;
             }
@@ -28,14 +27,20 @@ public class KakaoMazeEscapeCommand {
                 int nextRow = currentLocation.row + nextDirection[i][0];
                 int nextCol = currentLocation.col + nextDirection[i][1];
                 String nextCommand = currentLocation.command + commandPriority[i];
-                if(nextRow <= 0 || nextRow > rowSize || nextCol <= 0 || nextCol > colSize || nextCommand.length() > answerSize) {
+                if(nextRow <= 0 || nextRow > rowSize || nextCol <= 0 || nextCol > colSize ||
+                        nextCommand.length() > answerSize
+                            || !isPossibleToReach(nextRow, nextCol , answerSize - nextCommand.length())) {
                     continue;
                 } else {
                     commands.add(new CommandAndLocation(nextRow, nextCol, nextCommand));
+                    break;
                 }
             }
         }
         return "impossible";
+    }
+    private  boolean isPossibleToReach(int r, int c, int remain) {
+        return ( Math.abs(r - endRow) + Math.abs(c - endCol) ) <= remain;
     }
     class CommandAndLocation {
         int row, col;
