@@ -1,9 +1,6 @@
-
-
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
-
 public class 등대 {
 	
 	Queue<Integer> lightQueue = new LinkedList<>();
@@ -14,7 +11,8 @@ public class 등대 {
 	public int solution(int n, int[][] lighthouse) {
 		initLightArray(lighthouse, n);
 		lightQueue.add(1);
-		turnOn();
+		visit[1] = true;
+		turnOn(1);
 		return lightCount;
 	}
 	private void initLightArray(int[][] lighthouse, int n) {
@@ -29,22 +27,16 @@ public class 등대 {
 			lightArray[lightPair[1]].add(lightPair[0]);
 		}
 	}
-	private void turnOn() {
-		while(!lightQueue.isEmpty()) {
-			int light = lightQueue.poll();
-			visit[light] = true;
-			// 단말 노드의 경우 상대방 등대를 킨다.
-			if(lightArray[light].size() == 1) {
-				if( !turnedOn[ lightArray[light].peek()] ) {
-					turnedOn[ lightArray[light].peek()] = true;
-					lightCount++;
-				}
-			}
-			for(int nextLight : lightArray[light]) {
-				if(!visit[nextLight]) {
-					lightQueue.add(nextLight);
-				}
+	private boolean turnOn(int light) {
+		boolean turnOnFlag = false;
+		for(int nextLight : lightArray[light]) {
+			if(!visit[nextLight]) {
+				visit[nextLight] = true;
+				lightQueue.add(nextLight);
+				turnOnFlag = (!turnOn(nextLight) || turnOnFlag  );
 			}
 		}
+		if(turnOnFlag) lightCount++;
+		return turnOnFlag;
 	}
 }
