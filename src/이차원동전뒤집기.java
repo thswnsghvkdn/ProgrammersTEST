@@ -3,14 +3,16 @@ public class 이차원동전뒤집기 {
 	// 2진수로 표현한 뒤집을 순서집합 1이면 뒤집는다
 	String binaryPriority = "";
 	// 동전 가로 세로 길이
-	int rowAndColumnSize;
+	int rowSize;
+	int colSize;
 	// 동전 MAP
 	String[] beginMap, targetMap;
 	// 최소 경우의 수
 	int minFlipedCount = -1;
     public int solution(int[][] beginning, int[][] target) {
         int answer = 0;
-        rowAndColumnSize = beginning.length * 2;
+        rowSize = beginning.length;
+        colSize = beginning[0].length;
         initPriority();
         initCoinMap(beginning, target);
         makeAllCases();
@@ -18,7 +20,7 @@ public class 이차원동전뒤집기 {
     }
     private void initPriority() {
     	// 동전 배열 가로 세로 길이만큼 0을 추가한다.
-    	for(int i = 0 ; i < rowAndColumnSize; i++) {
+    	for(int i = 0 ; i < rowSize + colSize; i++) {
     		binaryPriority += "0";
     	}
     }
@@ -38,15 +40,12 @@ public class 이차원동전뒤집기 {
     // 모든 경우의 수 확인
     private void makeAllCases() {
     	//4 라면 1111(2) 는 2^(5) - 1 이다
-    	int casesNumber = (int) (Math.pow(2 , rowAndColumnSize + 1) - 1);
+    	int casesNumber = (int) (Math.pow(2 , rowSize + colSize + 1) - 1);
     	for(int i = 1; i <= casesNumber; i++) {
     		String nextBinary = Integer.toBinaryString(i);
     		String nextCase = binaryPriority + nextBinary;
-    		String rowCase = nextCase.substring(nextBinary.length() , nextBinary.length() + rowAndColumnSize / 2);
-    		String colCase = nextCase.substring(nextBinary.length() + rowAndColumnSize / 2, nextBinary.length() + rowAndColumnSize);
-    		if(rowCase.equals("01011") &&  colCase.equals("01010")) {
-    			System.out.print("a");
-    		}
+    		String rowCase = nextCase.substring(nextBinary.length() , nextBinary.length() + rowSize );
+    		String colCase = nextCase.substring(nextBinary.length() + rowSize, nextBinary.length() + rowSize + colSize);
     		checkEachCase(rowCase, colCase);
     	}
     }
@@ -77,7 +76,7 @@ public class 이차원동전뒤집기 {
     // 동전 MAP 에서 열 또는 행을 뒤집는다.
     private void flipCoin(String[] beginMap, String type, int num) {
     	if(type.equals("col")) {
-    		for(int i = 0 ; i < beginMap.length; i++ ) {
+    		for(int i = 0 ; i < rowSize; i++ ) {
     			char fliped = beginMap[i].charAt(num) == '0' ? '1' : '0';
     			StringBuilder sb = new StringBuilder(beginMap[i]);
     			sb.setCharAt(num, fliped);
@@ -85,7 +84,7 @@ public class 이차원동전뒤집기 {
     		}
     	} else if(type.equals("row")) {
     		String flipedString = "";
-    		for(int i = 0 ; i < beginMap.length; i++) {
+    		for(int i = 0 ; i < colSize; i++) {
     			char fliped = beginMap[num].charAt(i) == '0' ? '1' : '0';
     			flipedString = flipedString + fliped;
     		}
@@ -94,7 +93,7 @@ public class 이차원동전뒤집기 {
     }
     // target map 과 일치하는지 검사
     private boolean checkMatched(String[] beginMap) {
-    	for(int i = 0 ; i < beginMap.length; i++) {
+    	for(int i = 0 ; i < rowSize; i++) {
     		if(!beginMap[i].equals(targetMap[i])) {
     			return false;
     		}
